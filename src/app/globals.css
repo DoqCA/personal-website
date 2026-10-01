@@ -8,9 +8,12 @@
   --color-muted: rgb(255 255 255 / 0.55);
   --color-line: rgb(255 255 255 / 0.1);
   --color-surface: rgb(255 255 255 / 0.04);
+
+  /* Page/fog base color. Must match config.colors.base in src/components/background/config.ts. */
+  --color-ocean: #02060d;
 }
 
-/* No background colors here: the page background is a separate fixed layer. */
+/* The page background is a fixed WebGL layer (PolygonOcean); <body> uses bg-ocean underneath it. */
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
