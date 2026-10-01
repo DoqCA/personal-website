@@ -41,11 +41,11 @@ export const config = {
     /** Distance from the camera to the point it orbits (world origin). */
     distance: 11,
     /** Low, near-horizontal view (mouse at the bottom). */
-    pitchMin: deg(25),
+    pitchMin: deg(20), /** Previously 25 */
     /** Bird's-eye view (mouse at the top). */
-    pitchMax: deg(75),
+    pitchMax: deg(35), /** Previously 65 */
     /** Max roll around the view axis, either way. */
-    rollMax: deg(12),
+    rollMax: deg(6), /** Previously 12 */
   },
 
   spring: {
