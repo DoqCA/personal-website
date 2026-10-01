@@ -70,8 +70,17 @@ export default function ProjectGrid() {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="flex h-full flex-col rounded-xl border border-line bg-surface p-6 backdrop-blur-md md:p-7">
-      <h3 className="text-xl font-bold text-white md:text-2xl">{project.title}</h3>
+    <article
+      className={`relative flex h-full flex-col overflow-hidden rounded-xl border bg-surface p-6 backdrop-blur-md md:p-7 ${
+        project.current
+          ? "border-ember/35 shadow-[inset_0_1px_0_0_rgb(224_69_63/0.25)]"
+          : "border-line"
+      }`}
+    >
+      {project.current && <CurrentMark />}
+      <h3 className={`text-xl font-bold text-white md:text-2xl ${project.current ? "mt-9" : ""}`}>
+        {project.title}
+      </h3>
       {project.badge && (
         <span className="mt-3 inline-flex w-fit items-center rounded-full border border-white/20 px-3 py-1 text-xs font-medium text-body">
           {project.badge}
@@ -112,5 +121,24 @@ function ProjectCard({ project }: { project: Project }) {
         ))}
       </ul>
     </article>
+  );
+}
+
+/** Top-right corner mark for in-progress projects: a folded ember corner plus a live label. */
+function CurrentMark() {
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 right-0 size-16 bg-[linear-gradient(225deg,rgb(224_69_63/0.35)_0%,rgb(224_69_63/0.08)_45%,transparent_50%)]"
+      />
+      <span className="absolute top-4 right-4 inline-flex items-center gap-2 rounded-full border border-ember/40 bg-ocean/70 px-2.5 py-1 text-[11px] font-semibold tracking-wider text-white/90 uppercase">
+        <span aria-hidden="true" className="relative flex size-2">
+          <span className="absolute inline-flex size-full animate-ping rounded-full bg-ember opacity-60 motion-reduce:animate-none" />
+          <span className="relative inline-flex size-2 rounded-full bg-ember" />
+        </span>
+        {projects.currentLabel}
+      </span>
+    </>
   );
 }

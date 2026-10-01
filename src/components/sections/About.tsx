@@ -1,6 +1,7 @@
 import Reveal from "@/components/ui/Reveal";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { about } from "@/data/site";
+import Education from "./Education";
 
 export default function About() {
   return (
@@ -23,6 +24,9 @@ export default function About() {
             </li>
           ))}
         </ul>
+      </Reveal>
+      <Reveal>
+        <Education />
       </Reveal>
     </Section>
   );

@@ -44,10 +44,22 @@ export type Project = {
   title: string;
   category: Exclude<ProjectCategory, "All">;
   badge?: string;
+  /** Marks a project as in progress: the card gets a corner mark and accent border. */
+  current?: boolean;
   description: string;
   githubUrl: string;
   demoUrl?: string;
   tags: string[];
+};
+
+export type EducationItem = {
+  degree: string;
+  school: string;
+  location: string;
+  dateRange: string;
+  /** Optional one-liner, e.g. GPA, honors, or a minor. */
+  detail?: string;
+  coursework: string[];
 };
 
 export type StackItem = {
@@ -104,6 +116,22 @@ export const about = {
   ] satisfies SocialLink[],
 };
 
+/** Rendered as a short block inside the About section; intentionally not in the nav. */
+export const education = {
+  heading: "Education",
+  courseworkLabel: "Relevant coursework",
+  items: [
+    {
+      degree: "[Degree, e.g. B.S. Computer Science]",
+      school: "[School]",
+      location: "[Location]",
+      dateRange: "[Date_range]",
+      detail: "[Detail: GPA, honors, minor]",
+      coursework: repeat(4, () => "[Course]"),
+    },
+  ] satisfies EducationItem[],
+};
+
 export const experience = {
   heading: "Experience",
   items: repeat<ExperienceItem>(3, (i) => ({
@@ -131,10 +159,12 @@ export const projects = {
   filterLabel: "Filter projects by category",
   githubLabel: "GitHub",
   demoLabel: "Demo",
+  currentLabel: "Currently building",
   items: projectCategoryOrder.map<Project>((category, i) => ({
     id: `project-${i + 1}`,
     title: "[Project_name]",
     category,
+    current: i < 2 ? true : undefined,
     badge: i % 2 === 0 ? "[Badge]" : undefined,
     description:
       "[Project_description: 2 to 3 lines describing what the project does, how it works, and what it is built with.]",

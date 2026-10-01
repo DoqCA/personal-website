@@ -60,7 +60,48 @@ export const config = {
     /** Facets turned fully away from the light. */
     shadow: "#03070d",
     /** Facets facing the light. Keep well below the white text. */
-    highlight: "#3a3f47",
+    highlight: "#51555c", /** Previously #3a3f47 */
+    /** Color the specular glints pick up, as if reflecting the falling red particles. */
+    reflection: "#c23a3a",
+  },
+
+  reflection: {
+    /** How much of the specular glint is tinted by `colors.reflection` (0 = white, 1 = full red). */
+    specularTint: 0.85,
+    /** Peak red tint on lit facets inside the drifting "reflection" patches. */
+    patchTint: 0.35,
+    /** World-space scale of the patches (higher = smaller, more frequent). */
+    patchScale: 0.18,
+    /** How fast the patches drift across the water. */
+    patchSpeed: 0.12,
+  },
+
+  particles: {
+    /** Particle counts, mirroring the grid's device tiers. */
+    count: 220,
+    countNarrow: 120,
+    countLowPower: 90,
+    /** Fraction of particles that are tumbling leaves; the rest are thin falling drops. */
+    leafRatio: 0.6,
+    /** Spawn volume around the origin: X half-width, Z range (negative = away from the camera), top height. */
+    spreadX: 16,
+    zRange: [-26, 7],
+    height: 9,
+    /** Fall speed in units/s (leaves use the low end, drops the high end). */
+    speedLeaf: [0.45, 0.9],
+    speedDrop: [2.6, 4.2],
+    /** World-space size (half-extent) of each sprite. */
+    sizeLeaf: [0.07, 0.14],
+    sizeDrop: [0.035, 0.06],
+    /** Horizontal sway amplitude for leaves (units). */
+    sway: 0.6,
+    /** Two-stop palette each particle picks between. */
+    colorA: "#e0453f",
+    colorB: "#8f1d24",
+    /** Peak alpha. Keep low so particles stay ambient behind the text. */
+    opacity: 0.75,
+    /** Height above the water where particles fade out (they "sink" into the ocean). */
+    surfaceFade: 0.9,
   },
 
   light: {

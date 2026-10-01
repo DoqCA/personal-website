@@ -1,7 +1,13 @@
 // Raw WebGL2 setup for the polygon ocean: shader compile/link, jittered grid mesh, uniforms.
 
 import { config, hexToRgb } from "./config";
-import { fragmentShader, MAX_WAVES, vertexShader } from "./shaders";
+import {
+  fragmentShader,
+  MAX_WAVES,
+  particleFragmentShader,
+  particleVertexShader,
+  vertexShader,
+} from "./shaders";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -12,6 +18,21 @@ export type OceanUniforms = {
   resolution: WebGLUniformLocation | null;
 };
 
+export type ParticleUniforms = OceanUniforms & {
+  camRight: WebGLUniformLocation | null;
+  camUp: WebGLUniformLocation | null;
+};
+
+export type ParticleResources = {
+  program: WebGLProgram;
+  shaders: [WebGLShader, WebGLShader];
+  vao: WebGLVertexArrayObject;
+  quadBuffer: WebGLBuffer;
+  instanceBuffer: WebGLBuffer;
+  count: number;
+  uniforms: ParticleUniforms;
+};
+
 export type OceanResources = {
   program: WebGLProgram;
   shaders: [WebGLShader, WebGLShader];
@@ -20,6 +41,8 @@ export type OceanResources = {
   indexBuffer: WebGLBuffer;
   indexCount: number;
   uniforms: OceanUniforms;
+  /** Null when there are no particles or their program failed; the ocean still renders. */
+  particles: ParticleResources | null;
 };
 
 function compileShader(gl: WebGL2RenderingContext, type: GLenum, source: string): WebGLShader | null {
@@ -87,12 +110,17 @@ export function buildGrid(segments: number) {
   return { vertices, indices };
 }
 
-function setStaticUniforms(gl: WebGL2RenderingContext, program: WebGLProgram) {
-  const loc = (name: string) => {
+function uniformLocator(gl: WebGL2RenderingContext, program: WebGLProgram) {
+  return (name: string) => {
     const l = gl.getUniformLocation(program, name);
     if (!l && isDev) console.warn(`[PolygonOcean] uniform ${name} not found`);
     return l;
   };
+}
+
+/** Waves, fog, and vignette: everything both programs need to agree on. */
+function setSharedUniforms(gl: WebGL2RenderingContext, program: WebGLProgram) {
+  const loc = uniformLocator(gl, program);
 
   const waves = new Float32Array(MAX_WAVES * 4);
   const amplitudes = new Float32Array(4);
@@ -102,19 +130,8 @@ function setStaticUniforms(gl: WebGL2RenderingContext, program: WebGLProgram) {
     amplitudes[i] = w.amplitude;
   });
 
-  const [lx, ly, lz] = config.light.direction;
-  const lLen = Math.hypot(lx, ly, lz) || 1;
-
   gl.uniform4fv(loc("uWaves"), waves);
   gl.uniform4fv(loc("uWaveAmplitudes"), amplitudes);
-  gl.uniform1f(loc("uHeightNoise"), config.grid.heightNoise);
-  gl.uniform1f(loc("uHeightNoiseDrift"), config.grid.heightNoiseDrift);
-  gl.uniform3f(loc("uLightDir"), lx / lLen, ly / lLen, lz / lLen);
-  gl.uniform3fv(loc("uBaseColor"), hexToRgb(config.colors.base));
-  gl.uniform3fv(loc("uShadowColor"), hexToRgb(config.colors.shadow));
-  gl.uniform3fv(loc("uHighlightColor"), hexToRgb(config.colors.highlight));
-  gl.uniform2f(loc("uShadeRange"), config.light.shadeLow, config.light.shadeHigh);
-  gl.uniform2f(loc("uSpecular"), config.light.specularStrength, config.light.specularPower);
   gl.uniform2f(loc("uFog"), config.fog.near, config.fog.far);
   gl.uniform2fv(loc("uVignetteCenter"), config.vignette.center);
   gl.uniform3f(loc("uVignette"), config.vignette.inner, config.vignette.outer, config.vignette.strength);
@@ -127,6 +144,148 @@ function setStaticUniforms(gl: WebGL2RenderingContext, program: WebGLProgram) {
   };
 }
 
+function setOceanUniforms(gl: WebGL2RenderingContext, program: WebGLProgram): OceanUniforms {
+  const loc = uniformLocator(gl, program);
+  const [lx, ly, lz] = config.light.direction;
+  const lLen = Math.hypot(lx, ly, lz) || 1;
+  const { specularTint, patchTint, patchScale, patchSpeed } = config.reflection;
+
+  gl.uniform1f(loc("uHeightNoise"), config.grid.heightNoise);
+  gl.uniform1f(loc("uHeightNoiseDrift"), config.grid.heightNoiseDrift);
+  gl.uniform3f(loc("uLightDir"), lx / lLen, ly / lLen, lz / lLen);
+  gl.uniform3fv(loc("uBaseColor"), hexToRgb(config.colors.base));
+  gl.uniform3fv(loc("uShadowColor"), hexToRgb(config.colors.shadow));
+  gl.uniform3fv(loc("uHighlightColor"), hexToRgb(config.colors.highlight));
+  gl.uniform3fv(loc("uReflectionColor"), hexToRgb(config.colors.reflection));
+  gl.uniform4f(loc("uReflection"), specularTint, patchTint, patchScale, patchSpeed);
+  gl.uniform2f(loc("uShadeRange"), config.light.shadeLow, config.light.shadeHigh);
+  gl.uniform2f(loc("uSpecular"), config.light.specularStrength, config.light.specularPower);
+
+  return setSharedUniforms(gl, program);
+}
+
+function setParticleUniforms(gl: WebGL2RenderingContext, program: WebGLProgram): ParticleUniforms {
+  const loc = uniformLocator(gl, program);
+  const p = config.particles;
+
+  gl.uniform1f(loc("uHeight"), p.height);
+  gl.uniform1f(loc("uSway"), p.sway);
+  gl.uniform1f(loc("uSurfaceFade"), p.surfaceFade);
+  gl.uniform3fv(loc("uColorA"), hexToRgb(p.colorA));
+  gl.uniform3fv(loc("uColorB"), hexToRgb(p.colorB));
+  gl.uniform1f(loc("uOpacity"), p.opacity);
+
+  return {
+    ...setSharedUniforms(gl, program),
+    camRight: loc("uCamRight"),
+    camUp: loc("uCamUp"),
+  };
+}
+
+/**
+ * Per-particle instance data: (x, z, phase, kind) and (speed, size, colorMix, spin), all hashed
+ * so the field is identical on every load.
+ */
+export function buildParticles(count: number) {
+  const p = config.particles;
+  const lerp = (range: readonly [number, number], t: number) => range[0] + (range[1] - range[0]) * t;
+
+  const data = new Float32Array(count * 8);
+  for (let i = 0; i < count; i++) {
+    const leaf = hash(i, 0, 11) < p.leafRatio ? 1 : 0;
+    data.set(
+      [
+        (hash(i, 0, 12) * 2 - 1) * p.spreadX,
+        lerp(p.zRange, hash(i, 0, 13)),
+        hash(i, 0, 14),
+        leaf,
+        lerp(leaf ? p.speedLeaf : p.speedDrop, hash(i, 0, 15)),
+        lerp(leaf ? p.sizeLeaf : p.sizeDrop, hash(i, 0, 16)),
+        hash(i, 0, 17),
+        hash(i, 0, 18),
+      ],
+      i * 8,
+    );
+  }
+  return data;
+}
+
+function linkProgram(gl: WebGL2RenderingContext, vsSource: string, fsSource: string, label: string) {
+  const vs = compileShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fsSource);
+  const program = gl.createProgram();
+  const cleanup = () => {
+    gl.deleteProgram(program);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+  };
+
+  if (!vs || !fs || !program) {
+    if (isDev) console.error(`[PolygonOcean] ${label}: shader or program creation failed`);
+    cleanup();
+    return null;
+  }
+
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    if (isDev) console.error(`[PolygonOcean] ${label} failed to link:\n${gl.getProgramInfoLog(program)}`);
+    cleanup();
+    return null;
+  }
+  return { program, shaders: [vs, fs] as [WebGLShader, WebGLShader] };
+}
+
+function destroyParticles(gl: WebGL2RenderingContext, res: ParticleResources) {
+  gl.deleteVertexArray(res.vao);
+  gl.deleteBuffer(res.quadBuffer);
+  gl.deleteBuffer(res.instanceBuffer);
+  gl.deleteProgram(res.program);
+  gl.deleteShader(res.shaders[0]);
+  gl.deleteShader(res.shaders[1]);
+}
+
+function createParticles(gl: WebGL2RenderingContext, count: number): ParticleResources | null {
+  if (count <= 0) return null;
+  const linked = linkProgram(gl, particleVertexShader, particleFragmentShader, "particle program");
+  if (!linked) return null;
+
+  const vao = gl.createVertexArray();
+  const quadBuffer = gl.createBuffer();
+  const instanceBuffer = gl.createBuffer();
+  if (!vao || !quadBuffer || !instanceBuffer) {
+    gl.deleteVertexArray(vao);
+    gl.deleteBuffer(quadBuffer);
+    gl.deleteBuffer(instanceBuffer);
+    gl.deleteProgram(linked.program);
+    gl.deleteShader(linked.shaders[0]);
+    gl.deleteShader(linked.shaders[1]);
+    return null;
+  }
+
+  gl.bindVertexArray(vao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, buildParticles(count), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(1);
+  gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 32, 0);
+  gl.vertexAttribDivisor(1, 1);
+  gl.enableVertexAttribArray(2);
+  gl.vertexAttribPointer(2, 4, gl.FLOAT, false, 32, 16);
+  gl.vertexAttribDivisor(2, 1);
+  gl.bindVertexArray(null);
+
+  gl.useProgram(linked.program);
+  const uniforms = setParticleUniforms(gl, linked.program);
+
+  return { ...linked, vao, quadBuffer, instanceBuffer, count, uniforms };
+}
+
 export function destroyResources(gl: WebGL2RenderingContext, res: OceanResources) {
   gl.deleteVertexArray(res.vao);
   gl.deleteBuffer(res.vertexBuffer);
@@ -134,37 +293,31 @@ export function destroyResources(gl: WebGL2RenderingContext, res: OceanResources
   gl.deleteProgram(res.program);
   gl.deleteShader(res.shaders[0]);
   gl.deleteShader(res.shaders[1]);
+  if (res.particles) destroyParticles(gl, res.particles);
 }
 
-/** Compiles, links, and uploads everything. Returns null (and cleans up) on any failure. */
-export function createResources(gl: WebGL2RenderingContext, segments: number): OceanResources | null {
-  const vs = compileShader(gl, gl.VERTEX_SHADER, vertexShader);
-  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fragmentShader);
-  const program = gl.createProgram();
+/** Compiles, links, and uploads everything. Returns null (and cleans up) on any ocean failure. */
+export function createResources(
+  gl: WebGL2RenderingContext,
+  segments: number,
+  particleCount: number,
+): OceanResources | null {
+  const linked = linkProgram(gl, vertexShader, fragmentShader, "ocean program");
+  if (!linked) return null;
+  const { program, shaders } = linked;
   const vao = gl.createVertexArray();
   const vertexBuffer = gl.createBuffer();
   const indexBuffer = gl.createBuffer();
 
-  const fail = (reason: string) => {
-    if (isDev) console.error(`[PolygonOcean] ${reason}`);
+  if (!vao || !vertexBuffer || !indexBuffer) {
+    if (isDev) console.error("[PolygonOcean] buffer creation failed");
     gl.deleteVertexArray(vao);
     gl.deleteBuffer(vertexBuffer);
     gl.deleteBuffer(indexBuffer);
     gl.deleteProgram(program);
-    gl.deleteShader(vs);
-    gl.deleteShader(fs);
+    gl.deleteShader(shaders[0]);
+    gl.deleteShader(shaders[1]);
     return null;
-  };
-
-  if (!vs || !fs) return fail("shader creation failed");
-  if (!program) return fail("createProgram returned null");
-  if (!vao || !vertexBuffer || !indexBuffer) return fail("buffer creation failed");
-
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    return fail(`program failed to link:\n${gl.getProgramInfoLog(program)}`);
   }
 
   const { vertices, indices } = buildGrid(segments);
@@ -181,19 +334,22 @@ export function createResources(gl: WebGL2RenderingContext, segments: number): O
   gl.bindVertexArray(null);
 
   gl.useProgram(program);
-  const uniforms = setStaticUniforms(gl, program);
+  const uniforms = setOceanUniforms(gl, program);
 
   gl.enable(gl.DEPTH_TEST);
+  // Particles are drawn after the ocean with straight alpha; the ocean ignores blending state.
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   const [r, g, b] = hexToRgb(config.colors.base);
   gl.clearColor(r, g, b, 1);
 
   return {
     program,
-    shaders: [vs, fs],
+    shaders,
     vao,
     vertexBuffer,
     indexBuffer,
     indexCount: indices.length,
     uniforms,
+    particles: createParticles(gl, particleCount),
   };
 }

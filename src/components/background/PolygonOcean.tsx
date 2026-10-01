@@ -6,18 +6,29 @@ import { config } from "./config";
 import { createResources, destroyResources, type OceanResources } from "./gl";
 import { multiply, orbitView, perspective } from "./math";
 
-function pickSegments(): number {
+/** Grid density and particle count, scaled down for narrow screens and low-power devices. */
+function pickDetail(): { segments: number; particles: number } {
   const { segments, segmentsNarrow, segmentsLowPower, narrowBreakpoint } = config.grid;
+  const { count, countNarrow, countLowPower } = config.particles;
   const nav = navigator as Navigator & { deviceMemory?: number };
   const lowPower = (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4;
+  const narrow = window.innerWidth < narrowBreakpoint;
   let n: number = segments;
-  if (window.innerWidth < narrowBreakpoint) n = Math.min(n, segmentsNarrow);
-  if (lowPower) n = Math.min(n, segmentsLowPower);
-  return n;
+  let p: number = count;
+  if (narrow) {
+    n = Math.min(n, segmentsNarrow);
+    p = Math.min(p, countNarrow);
+  }
+  if (lowPower) {
+    n = Math.min(n, segmentsLowPower);
+    p = Math.min(p, countLowPower);
+  }
+  return { segments: n, particles: p };
 }
 
 /**
- * Full-viewport, fixed, live-rendered low-poly ocean (raw WebGL2).
+ * Full-viewport, fixed, live-rendered low-poly ocean (raw WebGL2) with red leaves and drops
+ * falling into it.
  * The canvas's CSS background doubles as the fallback when WebGL2 is unavailable or the context is lost.
  */
 export default function PolygonOcean() {
@@ -36,8 +47,8 @@ export default function PolygonOcean() {
     const gl = canvas.getContext("webgl2", { antialias: true, powerPreference: "default" });
     if (!gl) return; // CSS fallback background stays visible.
 
-    const segments = pickSegments();
-    let res: OceanResources | null = createResources(gl, segments);
+    const detail = pickDetail();
+    let res: OceanResources | null = createResources(gl, detail.segments, detail.particles);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -68,16 +79,38 @@ export default function PolygonOcean() {
 
       const { view, eye } = orbitView(pitch, roll, distance);
       const proj = perspective(fovY, canvas.width / canvas.height, near, far);
+      const viewProj = multiply(proj, view);
+
+      const setFrameUniforms = (u: OceanResources["uniforms"]) => {
+        gl.uniformMatrix4fv(u.viewProj, false, viewProj);
+        gl.uniform1f(u.time, time);
+        gl.uniform3f(u.cameraPos, eye[0], eye[1], eye[2]);
+        gl.uniform2f(u.resolution, canvas.width, canvas.height);
+      };
 
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.useProgram(res.program);
-      gl.uniformMatrix4fv(res.uniforms.viewProj, false, multiply(proj, view));
-      gl.uniform1f(res.uniforms.time, time);
-      gl.uniform3f(res.uniforms.cameraPos, eye[0], eye[1], eye[2]);
-      gl.uniform2f(res.uniforms.resolution, canvas.width, canvas.height);
+      setFrameUniforms(res.uniforms);
       gl.bindVertexArray(res.vao);
       gl.drawElements(gl.TRIANGLES, res.indexCount, gl.UNSIGNED_INT, 0);
+
+      const particles = res.particles;
+      if (particles) {
+        // Depth-tested against the water (so they sink into it) but never written, so they
+        // don't occlude each other.
+        gl.useProgram(particles.program);
+        setFrameUniforms(particles.uniforms);
+        // Camera basis for billboarding: the first two rows of the (column-major) view matrix.
+        gl.uniform3f(particles.uniforms.camRight, view[0], view[4], view[8]);
+        gl.uniform3f(particles.uniforms.camUp, view[1], view[5], view[9]);
+        gl.enable(gl.BLEND);
+        gl.depthMask(false);
+        gl.bindVertexArray(particles.vao);
+        gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, particles.count);
+        gl.depthMask(true);
+        gl.disable(gl.BLEND);
+      }
       gl.bindVertexArray(null);
     };
 
@@ -129,7 +162,7 @@ export default function PolygonOcean() {
     };
 
     const onContextRestored = () => {
-      res = createResources(gl, segments);
+      res = createResources(gl, detail.segments, detail.particles);
       refresh();
     };
 
