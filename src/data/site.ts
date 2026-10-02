@@ -70,8 +70,6 @@ export type StackItem = {
 
 export type StackGroup = { name: string; items: StackItem[] };
 
-export type QuoteItem = { text: string; author: string };
-
 const repeat = <T,>(count: number, make: (i: number) => T): T[] =>
   Array.from({ length: count }, (_, i) => make(i));
 
@@ -202,15 +200,6 @@ export const contact = {
     success: "[Success_message: Thanks, I'll get back to you soon.]",
     error: "[Error_message: Something went wrong. Please try again.]",
   },
-};
-
-export const quotes = {
-  label: "Quote of the day",
-  nextLabel: "Show another quote",
-  items: repeat<QuoteItem>(3, (i) => ({
-    text: `[Quote_text_${i + 1}]`,
-    author: "[Quote_author]",
-  })),
 };
 
 export const footer = {

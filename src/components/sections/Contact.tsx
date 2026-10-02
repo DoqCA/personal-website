@@ -3,7 +3,6 @@ import Reveal from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { contact } from "@/data/site";
 import ContactForm from "./ContactForm";
-import QuoteOfTheDay from "./QuoteOfTheDay";
 
 export default function Contact() {
   return (
@@ -33,8 +32,6 @@ export default function Contact() {
 
         <ContactForm />
       </Reveal>
-
-      <QuoteOfTheDay />
     </Section>
   );
 }

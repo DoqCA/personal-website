@@ -7,8 +7,6 @@ import {
   FileText,
   MapPin,
   Menu,
-  Quote,
-  RefreshCw,
   X,
 } from "lucide-react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
@@ -25,8 +23,6 @@ export const CloseIcon: Icon = X;
 export const ChevronDownIcon: Icon = ChevronDown;
 export const ExternalLinkIcon: Icon = ExternalLink;
 export const MapPinIcon: Icon = MapPin;
-export const QuoteIcon: Icon = Quote;
-export const RefreshIcon: Icon = RefreshCw;
 export const DocumentIcon: Icon = FileText;
 /** Neutral glyph shown on stack chips that have no specific logo yet. */
 export const PlaceholderTechIcon: Icon = Box;
