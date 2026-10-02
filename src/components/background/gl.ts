@@ -159,7 +159,7 @@ function setOceanUniforms(gl: WebGL2RenderingContext, program: WebGLProgram): Oc
   gl.uniform3fv(loc("uReflectionColor"), hexToRgb(config.colors.reflection));
   gl.uniform4f(loc("uReflection"), specularTint, patchTint, patchScale, patchSpeed);
   gl.uniform2f(loc("uShadeRange"), config.light.shadeLow, config.light.shadeHigh);
-  gl.uniform2f(loc("uSpecular"), config.light.specularStrength, config.light.specularPower);
+  gl.uniform3f(loc("uSpecular"), config.light.specularStrength, config.light.specularPower, config.light.brightnessCap);
 
   return setSharedUniforms(gl, program);
 }

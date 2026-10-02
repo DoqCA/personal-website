@@ -72,7 +72,7 @@ uniform vec3 uHighlightColor;
 uniform vec3 uReflectionColor;
 uniform vec4 uReflection;        // specularTint, patchTint, patchScale, patchSpeed
 uniform vec2 uShadeRange;        // lambert low/high
-uniform vec2 uSpecular;          // strength, power
+uniform vec3 uSpecular;          // strength, power, brightness cap
 ${atmosphere}
 out vec4 outColor;
 
@@ -95,10 +95,10 @@ void main() {
   float field = sin(q.x + t) * sin(q.y * 1.3 - t * 0.8) + 0.6 * sin((q.x - q.y) * 0.7 + t * 1.4);
   float glow = smoothstep(0.2, 1.2, field);
 
-  vec3 lit = mix(uHighlightColor, uReflectionColor * 0.7, glow * uReflection.y);
+  vec3 lit = mix(uHighlightColor, uReflectionColor * 0.85, glow * uReflection.y);
   vec3 glint = mix(uHighlightColor, uReflectionColor, uReflection.x);
   vec3 color = mix(uShadowColor, lit, shade) + glint * spec * (0.7 + 0.6 * glow);
-  color = min(color, max(uHighlightColor, uReflectionColor * 0.75) * 1.05);
+  color = min(color, max(uHighlightColor, uReflectionColor * 0.85) * uSpecular.z);
 
   color = mix(color, uBaseColor, atmosphere(dist));
   outColor = vec4(color, 1.0);

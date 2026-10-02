@@ -62,14 +62,14 @@ export const config = {
     /** Facets facing the light. Keep well below the white text. */
     highlight: "#51555c", /** Previously #3a3f47 */
     /** Color the specular glints pick up, as if reflecting the falling red particles. */
-    reflection: "#c23a3a",
+    reflection: "#e8302c", /** Previously #c23a3a */
   },
 
   reflection: {
     /** How much of the specular glint is tinted by `colors.reflection` (0 = white, 1 = full red). */
     specularTint: 0.85,
     /** Peak red tint on lit facets inside the drifting "reflection" patches. */
-    patchTint: 0.35,
+    patchTint: 0.5, /** Previously 0.35 */
     /** World-space scale of the patches (higher = smaller, more frequent). */
     patchScale: 0.18,
     /** How fast the patches drift across the water. */
@@ -110,8 +110,12 @@ export const config = {
     /** Lambert range mapped to shadow → highlight. Narrower = harsher facets. */
     shadeLow: 0.25,
     shadeHigh: 0.95,
-    specularStrength: 0.35,
-    specularPower: 28,
+    /** Brightness of the glints. Higher = shinier. */
+    specularStrength: 0.6, /** Previously 0.35 */
+    /** Glint tightness. Higher = smaller, sharper, glossier highlights. */
+    specularPower: 48, /** Previously 28 */
+    /** Brightness cap on the final ocean color, relative to the highlight/reflection colors. Raise to let glints pop more. */
+    brightnessCap: 1.3, /** Previously 1.05 */
   },
 
   fog: {
