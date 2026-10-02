@@ -74,11 +74,12 @@ const repeat = <T,>(count: number, make: (i: number) => T): T[] =>
   Array.from({ length: count }, (_, i) => make(i));
 
 export const site = {
-  name: "[Your_name]",
-  role: "[Role]",
-  specialty: "[Specialty]",
+  name: "O'Mario",
+  role1: "Coder",
+  role2: "Tinkerer",
+  role3: "People Person",
   metadata: {
-    title: "[Your_name] | [Role]",
+    title: "O'Mario Dev",
     description: "[Site_description]",
   },
 };
@@ -100,16 +101,25 @@ export const ui = {
 
 export const hero = {
   greeting: `Hi, I'm ${site.name}`,
-  subtitle: `${site.role}. ${site.specialty}`,
+  subtitle: `${site.role1}. ${site.role2}. ${site.role3}`,
 };
 
 export const about = {
   heading: "About Me",
-  paragraph:
-    "[About_paragraph: 2 to 4 sentences about who you are, what you have been building, where you have worked, and what you are looking for next. This text is intentionally long enough to wrap across a few lines so the layout is visible.]",
+  paragraphs: [
+    `I'm a Computer Science student at the University of Alberta with 
+    a passion for automation and technology that helps people focus on 
+    the things they find most important (which you can see in some of my projects below).`,
+    `Fun fact: My path into software actually started with Minecraft redstone 
+    and command blocks (and the Minecraft Redstone Handbook, which I still have on my bookshelf), and that curiosity for making systems do the work 
+    hasn't gone away.`, 
+    `I'm a people person who enjoys researching, building and innovating in teams, 
+    and am actively looking for opportunities to learn new technologies and 
+    build things that make a real difference.`,
+  ],
   socials: [
-    { label: "GitHub", href: "#", icon: GithubIcon },
-    { label: "LinkedIn", href: "#", icon: LinkedinIcon },
+    { label: "GitHub", href: "https://github.com/DoqCA", icon: GithubIcon },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/dqobrown/", icon: LinkedinIcon },
     { label: "Resume", href: "#", icon: DocumentIcon },
   ] satisfies SocialLink[],
 };
@@ -120,10 +130,10 @@ export const education = {
   courseworkLabel: "Relevant coursework",
   items: [
     {
-      degree: "[Degree, e.g. B.S. Computer Science]",
-      school: "[School]",
+      degree: "BSc Computer Science",
+      school: "University of Alberta",
       location: "[Location]",
-      dateRange: "[Date_range]",
+      dateRange: "Expected: 2028",
       detail: "[Detail: GPA, honors, minor]",
       coursework: repeat(4, () => "[Course]"),
     },
@@ -153,7 +163,7 @@ const projectCategoryOrder: Project["category"][] = [
 ];
 
 export const projects = {
-  heading: "Personal Projects",
+  heading: "Projects",
   filterLabel: "Filter projects by category",
   githubLabel: "GitHub",
   demoLabel: "Demo",

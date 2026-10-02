@@ -8,9 +8,11 @@ export default function About() {
     <Section id="about">
       <Reveal>
         <SectionHeading id="about">{about.heading}</SectionHeading>
-        <p className="mt-8 max-w-5xl text-lg leading-relaxed font-light text-body md:text-xl md:leading-relaxed">
-          {about.paragraph}
-        </p>
+        <div className="mt-8 max-w-5xl space-y-4 text-lg leading-relaxed font-light text-body md:text-xl md:leading-relaxed">
+          {about.paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
         <ul className="mt-10 flex items-center gap-6">
           {about.socials.map(({ label, href, icon: Icon }) => (
             <li key={label}>
