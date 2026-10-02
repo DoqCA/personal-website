@@ -10,7 +10,7 @@ const sectionIds = navItems.map((item) => item.id);
 const panelId = "mobile-nav-panel";
 
 const glass =
-  "border border-white/10 bg-black/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.35)]";
+  "border border-white/10 bg-black/40 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.35)]";
 
 const focusRing =
   "outline-none focus-visible:ring-2 focus-visible:ring-white/40";
