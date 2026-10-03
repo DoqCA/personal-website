@@ -133,7 +133,7 @@ export const education = {
       degree: "BSc Computer Science",
       school: "University of Alberta",
       location: "[Location]",
-      dateRange: "Expected: 2028",
+      dateRange: "Expected: 04/2028",
       detail: "[Detail: GPA, honors, minor]",
       coursework: repeat(4, () => "[Course]"),
     },
