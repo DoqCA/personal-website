@@ -79,7 +79,7 @@ export type Project = {
   /** Marks a project as in progress: the card gets a corner mark and accent border. */
   current?: boolean;
   description: string;
-  githubUrl: string;
+  githubUrl?: string;
   demoUrl?: string;
   tags: string[];
 };
@@ -236,7 +236,7 @@ export const projects = {
     },
     {
       id: "personal-website",
-      title: "Personal Website",
+      title: "This Website",
       category: "Web",
       description:
         "This dark, minimal portfolio, built with Next.js, React, strict TypeScript, and Tailwind CSS v4 on Vercel. Its animated background renders a static fallback first and lazy-loads the animation only on capable devices.",
@@ -249,18 +249,18 @@ export const projects = {
       category: "AI/ML",
       description:
         "A CLI tool for audio FOIP compliance that removes names and student voices from lecture audio using NLP and on-device transcription, with a supervised lecturer/student classifier reaching ~0.90 F1. Migrated from Python to C++ for a large runtime cut.",
-      githubUrl: "#",
+      githubUrl: "https://github.com/DoqCA/Audio-Deidentification-Project-Reconstruction",
       tags: ["Python", "C++", "Supervised Learning", "NLP", "Audio", "CLI"],
     },
     {
       id: "android-event-manager",
       title: "AndroidOS Event Management Application",
       category: "Misc",
-      badge: "Team Lead",
+      badge: "Full Stack",
       description:
-        "A full-stack Android event management app built by a team of 6 with Java, XML, and Firebase across the full SDLC, using Agile/Scrum, TDD, and automated CI/CD, documented with UML and CRC cards.",
-      githubUrl: "#",
-      tags: ["Java", "Android", "Firebase", "Agile", "CI/CD"],
+        "A full-stack Android event management app built by a team of 6 with Java, XML, and Firestore across the full SDLC, using Agile/Scrum, TDD, and automated CI/CD, documented with UML and CRC cards.",
+      githubUrl: "https://github.com/CMPUT301W26tigers/tigers-events",
+      tags: ["Java", "Android", "Firestore", "Agile", "CI/CD"],
     },
     {
       id: "ur2phd-nlp-reproduction",
@@ -269,7 +269,6 @@ export const projects = {
       badge: "Research",
       description:
         "Reproduced a peer-reviewed Google NLP paper on perturbation sensitivity using open-source HuggingFace toxicity and sentiment models, with a Python data pipeline replicating the paper's filtering methodology and analysis of the results.",
-      githubUrl: "#",
       tags: ["Python", "NLP", "HuggingFace", "Research", "Data Analysis"],
     },
   ] satisfies Project[],
@@ -323,6 +322,7 @@ export const stack = {
         { name: "Shell", icon: ShellIcon },
         { name: "Vercel", icon: VercelIcon },
         { name: "Colab", icon: ColabIcon },
+        {name: "Firebase", icon: FirebaseIcon},
         { name: "FFmpeg", icon: FfmpegIcon },
         { name: "VMware", icon: VmwareIcon },
         { name: "Claude Code", icon: ClaudeIcon },

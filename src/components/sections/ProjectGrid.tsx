@@ -91,15 +91,17 @@ function ProjectCard({ project }: { project: Project }) {
       </p>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <a
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`inline-flex items-center gap-2 rounded-lg border border-black bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-900 ${focusRing}`}
-        >
-          <ExternalLinkIcon aria-hidden className="size-4" />
-          {projects.githubLabel}
-        </a>
+        { project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-2 rounded-lg border border-black bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-900 ${focusRing}`}
+          >
+            <ExternalLinkIcon aria-hidden className="size-4" />
+            {projects.githubLabel}
+          </a>
+        )}
         {project.demoUrl && (
           <a
             href={project.demoUrl}
