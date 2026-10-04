@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Site
 
-## Getting Started
+Single-page portfolio with a dark, minimal design over a hand-written WebGL "polygon ocean" background.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) on **React 19**
+- **TypeScript** (strict)
+- **Tailwind CSS v4**, CSS-first config in `src/app/globals.css` (no `tailwind.config.js`)
+- **Raw WebGL** for the background, with no three.js or animation library
+- **lucide-react** / **react-icons** for icons, **Inter** via `next/font`
+- **pnpm**, Node **24.x**, deployed on **Vercel**
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev        # http://localhost:3000
+pnpm check      # lint + typecheck + build; run before pushing
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Layout
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+  app/                    layout, page, globals.css, fonts
+  components/background/  WebGL ocean (all tunables in config.ts)
+  components/sections/    page sections (Hero, About, Projects, ...)
+  components/ui/          shared primitives (Section, Reveal, Collapse)
+  data/site.ts            all site copy and links
+  lib/contact.ts          contact form handler (stubbed as of now)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To change content, edit `src/data/site.ts`. You shouldn't need to touch the components.
 
-## Learn More
+## Considerations
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Performance first.** Components are Server Components by default, and only interactive pieces use `"use client"`. CSS is inlined (`experimental.inlineCss`) to remove a render-blocking request. Scroll reveals use `IntersectionObserver` and CSS instead of a motion library.
+- **Background is adaptive.** Grid density, particle count, and MSAA scale down on narrow or low-power devices. Setup waits for idle time. Rendering pauses when the tab is hidden, recovers from WebGL context loss, and draws a single static frame under `prefers-reduced-motion`.
+- **Color sync.** `config.ts` → `colors.base` must match `--color-ocean` in `globals.css`.
+- **Minimal dependencies.** Prefer native CSS and browser APIs before adding packages.
