@@ -16,7 +16,6 @@ import {
   SiCplusplus,
   SiFfmpeg,
   SiFirebase,
-  SiFramer,
   SiGit,
   SiGithub,
   SiGnubash,
@@ -77,7 +76,6 @@ export const HtmlIcon: Icon = SiHtml5;
 export const ReactIcon: Icon = SiReact;
 export const NextjsIcon: Icon = SiNextdotjs;
 export const TailwindIcon: Icon = SiTailwindcss;
-export const MotionIcon: Icon = SiFramer;
 export const PandasIcon: Icon = SiPandas;
 export const NumpyIcon: Icon = SiNumpy;
 export const ScipyIcon: Icon = SiScipy;

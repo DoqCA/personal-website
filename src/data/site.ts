@@ -15,7 +15,6 @@ import {
   JavascriptIcon,
   LinkedinIcon,
   MatplotlibIcon,
-  MotionIcon,
   NextjsIcon,
   NodejsIcon,
   NumpyIcon,
@@ -239,9 +238,9 @@ export const projects = {
       title: "This Website",
       category: "Web",
       description:
-        "This dark, minimal portfolio, built with Next.js, React, strict TypeScript, and Tailwind CSS v4 on Vercel. Its animated background renders a static fallback first and lazy-loads the animation only on capable devices.",
+        "My personal portfolio showcasing my projects, experience, and skills. Built with Next.js, React, TypeScript, and Tailwind CSS, featuring a custom WebGL animated background (as you can see), and deployed on Vercel with a focus on performance across devices.",
       githubUrl: "#",
-      tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Motion", "Vercel"],
+      tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
     },
     {
       id: "audio-deidentification",
@@ -290,7 +289,6 @@ export const stack = {
         { name: "React", icon: ReactIcon },
         { name: "Next.js", icon: NextjsIcon },
         { name: "Tailwind CSS", icon: TailwindIcon },
-        { name: "Motion", icon: MotionIcon },
       ],
     },
     {
