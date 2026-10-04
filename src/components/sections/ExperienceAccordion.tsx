@@ -71,13 +71,15 @@ export default function ExperienceAccordion({ items }: { items: ExperienceItem[]
                     <li key={i}>{bullet}</li>
                   ))}
                 </ul>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {item.tech.map((tech, i) => (
-                    <li key={i}>
-                      <Chip>{tech}</Chip>
-                    </li>
-                  ))}
-                </ul>
+                {item.tech.length > 0 && (
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {item.tech.map((tech, i) => (
+                      <li key={i}>
+                        <Chip>{tech}</Chip>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </motion.div>
           </li>

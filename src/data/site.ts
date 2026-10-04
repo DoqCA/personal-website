@@ -1,8 +1,41 @@
 // All site copy lives here. Replace the [Placeholders] to fill in the site.
 import {
+  ClaudeIcon,
+  ColabIcon,
+  CppIcon,
   DocumentIcon,
+  FfmpegIcon,
+  FirebaseIcon,
+  GitIcon,
+  GithubBrandIcon,
   GithubIcon,
+  GradioIcon,
+  HtmlIcon,
+  JavaIcon,
+  JavascriptIcon,
   LinkedinIcon,
+  MatplotlibIcon,
+  MotionIcon,
+  NextjsIcon,
+  NodejsIcon,
+  NumpyIcon,
+  OllamaIcon,
+  OpencvIcon,
+  PandasIcon,
+  PythonIcon,
+  PytorchIcon,
+  ReactIcon,
+  RustIcon,
+  ScikitlearnIcon,
+  ScipyIcon,
+  ShellIcon,
+  SqliteIcon,
+  StreamlitIcon,
+  TailwindIcon,
+  TensorflowIcon,
+  TypescriptIcon,
+  VercelIcon,
+  VmwareIcon,
   type Icon,
 } from "@/components/ui/icons";
 
@@ -30,7 +63,6 @@ export type ExperienceItem = {
 
 export const projectCategories = [
   "All",
-  "Finance",
   "AI/ML",
   "Games",
   "Web",
@@ -69,9 +101,6 @@ export type StackItem = {
 };
 
 export type StackGroup = { name: string; items: StackItem[] };
-
-const repeat = <T,>(count: number, make: (i: number) => T): T[] =>
-  Array.from({ length: count }, (_, i) => make(i));
 
 export const site = {
   name: "O'Mario",
@@ -132,35 +161,60 @@ export const education = {
     {
       degree: "BSc Computer Science",
       school: "University of Alberta",
-      location: "[Location]",
+      location: "Edmonton, AB",
       dateRange: "Expected: 04/2028",
-      detail: "[Detail: GPA, honors, minor]",
-      coursework: repeat(4, () => "[Course]"),
+      detail: "Major GPA (CMPUT): 3.6 | GPA: 3.3",
+      coursework: [
+        "Intro to Reinforcement Learning",
+        "Machine Learning I",
+        "Game AI",
+        "Practical Programming Methodology",
+      ],
     },
   ] satisfies EducationItem[],
 };
 
 export const experience = {
   heading: "Experience",
-  items: repeat<ExperienceItem>(3, (i) => ({
-    id: `job-${i + 1}`,
-    title: "[Job_title]",
-    company: "[Company]",
-    location: "[Location]",
-    dateRange: "[Date_range]",
-    bullets: repeat(3, () => "[Responsibility_or_achievement]"),
-    tech: repeat(4, () => "[Tech]"),
-  })),
+  items: [
+    {
+      id: "riipen-level-up",
+      title: "Software Engineering Placement (Incoming)",
+      company: "Undetermined",
+      location: "Remote",
+      dateRange: "10/2026 – 12/2026",
+      bullets: [
+        "Accepted into Riipen Level Up's employer-matched placement program; currently being matched with a software project.",
+      ],
+      tech: [],
+    },
+    {
+      id: "blackboyscode",
+      title: "Team Lead & Curriculum Development",
+      company: "BlackBoysCode",
+      location: "Remote",
+      dateRange: "02/2026 – Present",
+      bullets: [
+        "Direct teams across Canada delivering technical literacy programs in Math, CS, and AI to students in grades 4–9.",
+        "Appointed to the national Curriculum Development Team, contributing to Python, Math, and ML instructional modules delivered to over 18,000 youth across North America.",
+      ],
+      tech: ["Python", "Machine Learning", "Curriculum Design", "Leadership"],
+    },
+    {
+      id: "marketyze",
+      title: "Web Development Team Lead",
+      company: "Marketyze",
+      location: "Remote",
+      dateRange: "09/2022 – 09/2023",
+      bullets: [
+        "Led a team of 3 to design, build, and maintain the company website in plain HTML, CSS, and JavaScript with a mobile-first approach, deployed on Glitch.",
+        "Cut load times across platforms (LCP under 2.5s) and raised Lighthouse performance scores by optimizing images (WebP/AVIF, srcset, compression), preloading the hero image, and lazy-loading below-the-fold content.",
+        "Began migration to a no-code platform ahead of a company restructuring and transferred ownership to a non-technical team so it could be maintained without engineering support.",
+      ],
+      tech: ["HTML", "CSS", "JavaScript", "Glitch", "Lighthouse"],
+    },
+  ] satisfies ExperienceItem[],
 };
-
-const projectCategoryOrder: Project["category"][] = [
-  "Finance",
-  "AI/ML",
-  "Games",
-  "Web",
-  "Misc",
-  "Finance",
-];
 
 export const projects = {
   heading: "Projects",
@@ -168,30 +222,114 @@ export const projects = {
   githubLabel: "GitHub",
   demoLabel: "Demo",
   currentLabel: "Currently building",
-  items: projectCategoryOrder.map<Project>((category, i) => ({
-    id: `project-${i + 1}`,
-    title: "[Project_name]",
-    category,
-    current: i < 2 ? true : undefined,
-    badge: i % 2 === 0 ? "[Badge]" : undefined,
-    description:
-      "[Project_description: 2 to 3 lines describing what the project does, how it works, and what it is built with.]",
-    githubUrl: "#",
-    demoUrl: i % 3 === 1 ? "#" : undefined,
-    tags: repeat(4 + (i % 3), () => "[Tag]"),
-  })),
+  items: [
+    {
+      id: "nte-theorycrafting-engine",
+      title: "Neverness to Everness Theorycrafting Engine",
+      category: "Games",
+      current: true,
+      description:
+        "A data-driven combat simulator in Rust that models characters, skills, buffs, and encounters as structured data, built for high-throughput Monte Carlo runs and validated against hand-calculated rotations.",
+      githubUrl: "#",
+      tags: ["Rust", "Monte Carlo", "Simulation", "Search", "Games"],
+    },
+    {
+      id: "personal-website",
+      title: "Personal Website",
+      category: "Web",
+      description:
+        "This dark, minimal portfolio, built with Next.js, React, strict TypeScript, and Tailwind CSS v4 on Vercel. Its animated background renders a static fallback first and lazy-loads the animation only on capable devices.",
+      githubUrl: "#",
+      tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Motion", "Vercel"],
+    },
+    {
+      id: "audio-deidentification",
+      title: "Audio Deidentification Application",
+      category: "AI/ML",
+      description:
+        "A CLI tool for audio FOIP compliance that removes names and student voices from lecture audio using NLP and on-device transcription, with a supervised lecturer/student classifier reaching ~0.90 F1. Migrated from Python to C++ for a large runtime cut.",
+      githubUrl: "#",
+      tags: ["Python", "C++", "Supervised Learning", "NLP", "Audio", "CLI"],
+    },
+    {
+      id: "android-event-manager",
+      title: "AndroidOS Event Management Application",
+      category: "Misc",
+      badge: "Team Lead",
+      description:
+        "A full-stack Android event management app built by a team of 6 with Java, XML, and Firebase across the full SDLC, using Agile/Scrum, TDD, and automated CI/CD, documented with UML and CRC cards.",
+      githubUrl: "#",
+      tags: ["Java", "Android", "Firebase", "Agile", "CI/CD"],
+    },
+    {
+      id: "ur2phd-nlp-reproduction",
+      title: "UR2PHD NLP Research Reproduction",
+      category: "AI/ML",
+      badge: "Research",
+      description:
+        "Reproduced a peer-reviewed Google NLP paper on perturbation sensitivity using open-source HuggingFace toxicity and sentiment models, with a Python data pipeline replicating the paper's filtering methodology and analysis of the results.",
+      githubUrl: "#",
+      tags: ["Python", "NLP", "HuggingFace", "Research", "Data Analysis"],
+    },
+  ] satisfies Project[],
 };
-
-const techItems = (count: number): StackItem[] =>
-  repeat(count, () => ({ name: "[Technology]" }));
 
 export const stack = {
   heading: "My Stack",
   groups: [
-    { name: "Frontend", items: techItems(10) },
-    { name: "Backend", items: techItems(5) },
-    { name: "Database", items: techItems(3) },
-    { name: "Tools", items: techItems(8) },
+    {
+      name: "Languages & Frameworks",
+      items: [
+        { name: "Python", icon: PythonIcon },
+        { name: "C++", icon: CppIcon },
+        { name: "Java", icon: JavaIcon },
+        { name: "Rust", icon: RustIcon },
+        { name: "TypeScript", icon: TypescriptIcon },
+        { name: "JavaScript", icon: JavascriptIcon },
+        { name: "HTML/CSS", icon: HtmlIcon },
+        { name: "React", icon: ReactIcon },
+        { name: "Next.js", icon: NextjsIcon },
+        { name: "Tailwind CSS", icon: TailwindIcon },
+        { name: "Motion", icon: MotionIcon },
+      ],
+    },
+    {
+      name: "Data Science",
+      items: [
+        { name: "Pandas", icon: PandasIcon },
+        { name: "NumPy", icon: NumpyIcon },
+        { name: "SciPy", icon: ScipyIcon },
+        { name: "Matplotlib", icon: MatplotlibIcon },
+        { name: "Scikit-learn", icon: ScikitlearnIcon },
+        { name: "PyTorch", icon: PytorchIcon },
+        { name: "TensorFlow", icon: TensorflowIcon },
+        { name: "OpenCV", icon: OpencvIcon },
+      ],
+    },
+    {
+      name: "Database & Backend",
+      items: [
+        { name: "Node.js", icon: NodejsIcon },
+        { name: "Firestore", icon: FirebaseIcon },
+        { name: "SQLite", icon: SqliteIcon },
+      ],
+    },
+    {
+      name: "Tools",
+      items: [
+        { name: "Git", icon: GitIcon },
+        { name: "GitHub", icon: GithubBrandIcon },
+        { name: "Shell", icon: ShellIcon },
+        { name: "Vercel", icon: VercelIcon },
+        { name: "Colab", icon: ColabIcon },
+        { name: "FFmpeg", icon: FfmpegIcon },
+        { name: "VMware", icon: VmwareIcon },
+        { name: "Claude Code", icon: ClaudeIcon },
+        { name: "Ollama", icon: OllamaIcon },
+        { name: "Streamlit", icon: StreamlitIcon },
+        { name: "Gradio", icon: GradioIcon },
+      ],
+    },
   ] satisfies StackGroup[],
 };
 

@@ -12,18 +12,20 @@ export default function Stack() {
           {stack.groups.map((group) => (
             <div
               key={group.name}
-              className="grid gap-4 md:grid-cols-[15rem_1fr] md:items-start md:gap-x-8"
+              className="grid gap-4 md:grid-cols-[15rem_1fr] md:items-start md:gap-x-8 wrap-break-word"
             >
               <h3 className="text-2xl font-medium text-white md:pt-1.5">{group.name}</h3>
               <ul className="flex flex-wrap gap-3">
                 {group.items.map((item, i) => {
                   const Icon = item.icon ?? PlaceholderTechIcon;
+                  // Brand logos set their own stroke; only the outline placeholder takes a width.
+                  const iconProps = item.icon ? {} : { strokeWidth: 1.5 };
                   return (
                     <li
                       key={i}
                       className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface px-4 py-2 text-sm text-body backdrop-blur-md"
                     >
-                      <Icon aria-hidden strokeWidth={1.5} className="size-5 text-muted" />
+                      <Icon aria-hidden {...iconProps} className="size-5 text-muted" />
                       {item.name}
                     </li>
                   );
