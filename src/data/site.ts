@@ -238,7 +238,7 @@ export const projects = {
       category: "Web",
       description:
         "My personal portfolio showcasing my projects, experience, and skills. Built with Next.js, React, TypeScript, and Tailwind CSS, featuring a custom WebGL animated background (as you can see), and deployed on Vercel with a focus on performance across devices.",
-      githubUrl: "#",
+      githubUrl: "https://github.com/DoqCA/personal-website",
       tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
     },
     {
