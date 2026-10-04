@@ -235,7 +235,7 @@ export default function PolygonOcean() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed top-0 left-0 -z-10 h-lvh w-full bg-ocean bg-[radial-gradient(ellipse_at_50%_45%,#0b1018_0%,var(--color-ocean)_65%)]"
+      className="pointer-events-none fixed top-0 left-0 -z-10 h-[calc(100lvh+120px)] w-full bg-ocean bg-[radial-gradient(ellipse_at_50%_45%,#0b1018_0%,var(--color-ocean)_65%)]"
     >
       <canvas
         ref={canvasRef}
