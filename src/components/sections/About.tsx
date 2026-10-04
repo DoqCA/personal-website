@@ -14,7 +14,9 @@ export default function About() {
           ))}
         </div>
         <ul className="mt-10 flex items-center gap-6">
-          {about.socials.map(({ label, href, icon: Icon }) => (
+          {about.socials
+          .filter(({ href }) => href)
+          .map(({ label, href, icon: Icon }) => (
             <li key={label}>
               <a
                 href={href}

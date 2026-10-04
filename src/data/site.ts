@@ -49,7 +49,7 @@ export type SectionId =
 
 export type NavItem = { id: SectionId; label: string };
 
-export type SocialLink = { label: string; href: string; icon: Icon };
+export type SocialLink = { label: string; href?: string; icon: Icon };
 
 export type ExperienceItem = {
   id: string;
@@ -149,7 +149,7 @@ export const about = {
   socials: [
     { label: "GitHub", href: "https://github.com/DoqCA", icon: GithubIcon },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/dqobrown/", icon: LinkedinIcon },
-    { label: "Resume", href: "#", icon: DocumentIcon },
+    { label: "Resume", href: "", icon: DocumentIcon },
   ] satisfies SocialLink[],
 };
 
