@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
 import { useState } from "react";
+import Collapse from "@/components/ui/Collapse";
 import { ChevronDownIcon } from "@/components/ui/icons";
 import { Chip } from "@/components/ui/Section";
 import type { ExperienceItem } from "@/data/site";
@@ -19,7 +19,7 @@ export default function ExperienceAccordion({ items }: { items: ExperienceItem[]
         return (
           <li
             key={item.id}
-            className="rounded-xl border border-line bg-surface backdrop-blur-md"
+            className="frosted rounded-xl border border-line"
           >
             <h3>
               <button
@@ -55,16 +55,7 @@ export default function ExperienceAccordion({ items }: { items: ExperienceItem[]
               </button>
             </h3>
 
-            <motion.div
-              id={panelId}
-              role="region"
-              aria-labelledby={buttonId}
-              inert={!open}
-              initial={false}
-              animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="overflow-hidden"
-            >
+            <Collapse id={panelId} role="region" aria-labelledby={buttonId} open={open}>
               <div className="px-6 pt-1 pb-5">
                 <ul className="list-disc space-y-2 pl-5 text-body marker:text-muted">
                   {item.bullets.map((bullet, i) => (
@@ -81,7 +72,7 @@ export default function ExperienceAccordion({ items }: { items: ExperienceItem[]
                   </ul>
                 )}
               </div>
-            </motion.div>
+            </Collapse>
           </li>
         );
       })}

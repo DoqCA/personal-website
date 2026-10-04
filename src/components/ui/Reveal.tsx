@@ -1,25 +1,36 @@
 "use client";
 
-import { motion } from "motion/react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
-/** Fades and lifts its children into view once. */
+/** Fades and lifts its children into view once (styles in globals.css under `.reveal`). */
 export default function Reveal({
   children,
-  className,
+  className = "",
 }: {
   children: ReactNode;
   className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    // A bottom margin rather than an intersection ratio, so very tall blocks still trigger.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        el.dataset.shown = "";
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -15% 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
-    >
+    <div ref={ref} className={`reveal ${className}`}>
       {children}
-    </motion.div>
+    </div>
   );
 }

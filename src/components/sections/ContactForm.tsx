@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { contact } from "@/data/site";
+import type { contact } from "@/data/site";
 import { sendContactMessage } from "@/lib/contact";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -9,9 +9,9 @@ type Status = "idle" | "sending" | "success" | "error";
 const field =
   "w-full rounded-lg border border-white/10 bg-black/30 px-4 text-white placeholder:text-muted transition-colors outline-none focus:border-white/30 focus:ring-2 focus:ring-white/20";
 
-export default function ContactForm() {
+/** Labels come in as a prop so this client component doesn't bundle all of site.ts (and its icons). */
+export default function ContactForm({ form }: { form: (typeof contact)["form"] }) {
   const [status, setStatus] = useState<Status>("idle");
-  const { form } = contact;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -36,7 +36,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-6 backdrop-blur-md md:p-8"
+      className="flex flex-col gap-4 frosted rounded-2xl border border-line p-6 md:p-8"
     >
       <label htmlFor="contact-name" className="sr-only">
         {form.nameLabel}

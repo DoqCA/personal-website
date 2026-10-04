@@ -1,12 +1,8 @@
-"use client";
-
-import { motion } from "motion/react";
 import { hero } from "@/data/site";
 
-const rise = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+// CSS-only entrance so the heading (the LCP element) paints with the HTML instead of waiting
+// for JavaScript to hydrate.
+const rise = "animate-rise motion-reduce:animate-none";
 
 export default function Hero() {
   return (
@@ -15,27 +11,19 @@ export default function Hero() {
       aria-labelledby="hero-heading"
       className="flex min-h-svh scroll-mt-24 items-center justify-center px-6 text-center md:px-8 lg:px-10"
     >
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        transition={{ staggerChildren: 0.15 }}
-      >
-        <motion.h1
+      <div>
+        <h1
           id="hero-heading"
-          variants={rise}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-5xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl"
+          className={`text-5xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl ${rise}`}
         >
           {hero.greeting}
-        </motion.h1>
-        <motion.p
-          variants={rise}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mt-6 text-xl font-light text-white sm:text-2xl lg:text-3xl"
+        </h1>
+        <p
+          className={`mt-6 text-xl font-light text-white [animation-delay:150ms] sm:text-2xl lg:text-3xl ${rise}`}
         >
           {hero.subtitle}
-        </motion.p>
-      </motion.div>
+        </p>
+      </div>
     </section>
   );
 }

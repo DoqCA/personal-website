@@ -1,6 +1,6 @@
 import Reveal from "@/components/ui/Reveal";
 import { Section, SectionHeading } from "@/components/ui/Section";
-import { projects } from "@/data/site";
+import { projectCategories, projects } from "@/data/site";
 import ProjectGrid from "./ProjectGrid";
 
 export default function Projects() {
@@ -9,7 +9,7 @@ export default function Projects() {
       <Reveal>
         <SectionHeading id="projects">{projects.heading}</SectionHeading>
       </Reveal>
-      <ProjectGrid />
+      <ProjectGrid categories={projectCategories} projects={projects} />
     </Section>
   );
 }

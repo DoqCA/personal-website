@@ -20,7 +20,7 @@ export default function Contact() {
           </h2>
           <p className="mt-8 text-lg font-light text-body">{contact.intro}</p>
           <div className="mt-8 flex items-center gap-4">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface backdrop-blur-md">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface">
               <MapPinIcon aria-hidden className="size-5 text-white" />
             </span>
             <div>
@@ -30,7 +30,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <ContactForm />
+        <ContactForm form={contact.form} />
       </Reveal>
     </Section>
   );
