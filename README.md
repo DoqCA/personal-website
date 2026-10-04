@@ -1,6 +1,6 @@
 # Personal Site
 
-Single-page portfolio with a dark, minimal design over a hand-written WebGL "polygon ocean" background.
+Single-page portfolio with a dark, minimal design over a raw WebGL "polygon ocean" background.
 
 ## Stack
 

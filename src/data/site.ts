@@ -230,7 +230,6 @@ export const projects = {
       current: true,
       description:
         "A data-driven combat simulator in Rust that models characters, skills, buffs, and encounters as structured data, built for high-throughput Monte Carlo runs and validated against hand-calculated rotations.",
-      githubUrl: "#",
       tags: ["Rust", "Monte Carlo", "Simulation", "Search", "Games"],
     },
     {
