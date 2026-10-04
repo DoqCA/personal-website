@@ -1,6 +1,6 @@
 import Reveal from "@/components/ui/Reveal";
 import { Section, SectionHeading } from "@/components/ui/Section";
-import { about } from "@/data/site";
+import { about, education } from "@/data/site";
 import Education from "./Education";
 
 export default function About() {
@@ -30,7 +30,7 @@ export default function About() {
         </ul>
       </Reveal>
       <Reveal>
-        <Education />
+        <Education education={education} />
       </Reveal>
     </Section>
   );

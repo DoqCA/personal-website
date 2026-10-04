@@ -1,21 +1,31 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { ExternalLinkIcon } from "@/components/ui/icons";
 import { Chip } from "@/components/ui/Section";
-import {
-  projectCategories,
-  projects,
-  type Project,
-  type ProjectCategory,
+import type {
+  Project,
+  ProjectCategory,
+  projectCategories as ProjectCategories,
+  projects as ProjectsData,
 } from "@/data/site";
+
+type Labels = Omit<typeof ProjectsData, "heading" | "items">;
 
 const focusRing =
   "outline-none focus-visible:ring-2 focus-visible:ring-white/40";
 
-export default function ProjectGrid() {
+/** Data comes in as props so this client component doesn't bundle all of site.ts (and its icons). */
+export default function ProjectGrid({
+  categories,
+  projects,
+}: {
+  categories: typeof ProjectCategories;
+  projects: typeof ProjectsData;
+}) {
   const [category, setCategory] = useState<ProjectCategory>("All");
+  // Cards only animate in after a filter change, not on first load.
+  const [filtered, setFiltered] = useState(false);
   const visible =
     category === "All"
       ? projects.items
@@ -28,14 +38,17 @@ export default function ProjectGrid() {
         aria-label={projects.filterLabel}
         className="mt-10 flex flex-wrap gap-3"
       >
-        {projectCategories.map((name) => {
+        {categories.map((name) => {
           const selected = name === category;
           return (
             <button
               key={name}
               type="button"
               aria-pressed={selected}
-              onClick={() => setCategory(name)}
+              onClick={() => {
+                setCategory(name);
+                setFiltered(true);
+              }}
               className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors md:text-base ${focusRing} ${
                 selected
                   ? "border-white/15 bg-white/15 text-white"
@@ -48,36 +61,31 @@ export default function ProjectGrid() {
         })}
       </div>
 
-      <motion.ul layout className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence mode="popLayout" initial={false}>
-          {visible.map((project) => (
-            <motion.li
-              key={project.id}
-              layout
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-            >
-              <ProjectCard project={project} />
-            </motion.li>
-          ))}
-        </AnimatePresence>
-      </motion.ul>
+      {/* Keyed by category so the filtered set remounts and pops in together. */}
+      <ul key={category} className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {visible.map((project) => (
+          <li
+            key={project.id}
+            className={filtered ? "animate-pop-in motion-reduce:animate-none" : undefined}
+          >
+            <ProjectCard project={project} labels={projects} />
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, labels }: { project: Project; labels: Labels }) {
   return (
     <article
-      className={`relative flex h-full flex-col overflow-hidden rounded-xl border bg-surface p-6 backdrop-blur-md md:p-7 ${
+      className={`relative flex h-full flex-col overflow-hidden frosted rounded-xl border p-6 md:p-7 ${
         project.current
           ? "border-ember/35 shadow-[inset_0_1px_0_0_rgb(224_69_63/0.25)]"
           : "border-line"
       }`}
     >
-      {project.current && <CurrentMark />}
+      {project.current && <CurrentMark label={labels.currentLabel} />}
       <h3 className={`text-xl font-bold text-white md:text-2xl ${project.current ? "mt-9" : ""}`}>
         {project.title}
       </h3>
@@ -99,7 +107,7 @@ function ProjectCard({ project }: { project: Project }) {
             className={`inline-flex items-center gap-2 rounded-lg border border-black bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-900 ${focusRing}`}
           >
             <ExternalLinkIcon aria-hidden className="size-4" />
-            {projects.githubLabel}
+            {labels.githubLabel}
           </a>
         )}
         {project.demoUrl && (
@@ -110,7 +118,7 @@ function ProjectCard({ project }: { project: Project }) {
             className={`inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/5 ${focusRing}`}
           >
             <ExternalLinkIcon aria-hidden className="size-4" />
-            {projects.demoLabel}
+            {labels.demoLabel}
           </a>
         )}
       </div>
@@ -127,7 +135,7 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 /** Top-right corner mark for in-progress projects: a folded ember corner plus a live label. */
-function CurrentMark() {
+function CurrentMark({ label }: { label: string }) {
   return (
     <>
       <span
@@ -139,7 +147,7 @@ function CurrentMark() {
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-ember opacity-60 motion-reduce:animate-none" />
           <span className="relative inline-flex size-2 rounded-full bg-ember" />
         </span>
-        {projects.currentLabel}
+        {label}
       </span>
     </>
   );

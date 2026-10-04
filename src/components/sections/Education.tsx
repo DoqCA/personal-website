@@ -1,17 +1,18 @@
 "use client";
 
-import { motion } from "motion/react";
 import { useState } from "react";
+import Collapse from "@/components/ui/Collapse";
 import { ChevronDownIcon } from "@/components/ui/icons";
 import { Chip } from "@/components/ui/Section";
-import { education } from "@/data/site";
+import type { education as EducationData } from "@/data/site";
 
 /**
  * Compact education ledger shown at the end of About. Styled as a ruled list with an ember
  * spine rather than a card, so it reads as an addendum to About instead of its own section.
  * Each entry expands to reveal relevant coursework.
+ * Data comes in as a prop so this client component doesn't bundle all of site.ts (and its icons).
  */
-export default function Education() {
+export default function Education({ education }: { education: typeof EducationData }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
@@ -79,16 +80,7 @@ export default function Education() {
               </button>
 
               {expandable && (
-                <motion.div
-                  id={panelId}
-                  role="region"
-                  aria-labelledby={buttonId}
-                  inert={!open}
-                  initial={false}
-                  animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="overflow-hidden"
-                >
+                <Collapse id={panelId} role="region" aria-labelledby={buttonId} open={open}>
                   <div className="pt-4">
                     <p className="text-xs font-semibold tracking-[0.2em] text-muted uppercase">
                       {education.courseworkLabel}
@@ -101,7 +93,7 @@ export default function Education() {
                       ))}
                     </ul>
                   </div>
-                </motion.div>
+                </Collapse>
               )}
             </li>
           );

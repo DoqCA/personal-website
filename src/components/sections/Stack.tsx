@@ -23,7 +23,7 @@ export default function Stack() {
                   return (
                     <li
                       key={i}
-                      className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface px-4 py-2 text-sm text-body backdrop-blur-md"
+                      className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface px-4 py-2 text-sm text-body"
                     >
                       <Icon aria-hidden {...iconProps} className="size-5 text-muted" />
                       {item.name}
