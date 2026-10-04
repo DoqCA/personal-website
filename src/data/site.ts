@@ -167,8 +167,9 @@ export const education = {
       coursework: [
         "Intro to Reinforcement Learning",
         "Machine Learning I",
-        "Game AI",
         "Practical Programming Methodology",
+        "Software Development I",
+        "Game AI",
       ],
     },
   ] satisfies EducationItem[],
@@ -336,9 +337,9 @@ export const stack = {
 export const contact = {
   eyebrow: "Contact",
   heading: "Get In Touch",
-  intro: "[Contact_intro_sentence]",
+  intro: "I'm always looking for opportunities to work on cool stuff. Let's get in touch!",
   locationLabel: "Location",
-  location: "[Location]",
+  location: "Canada",
   form: {
     nameLabel: "Name",
     emailLabel: "Email",
