@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type SyntheticEvent } from "react";
 import type { contact } from "@/data/site";
 import { sendContactMessage } from "@/lib/contact";
 
@@ -13,17 +13,12 @@ const field =
 export default function ContactForm({ form }: { form: (typeof contact)["form"] }) {
   const [status, setStatus] = useState<Status>("idle");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const formElement = event.currentTarget;
-    const data = new FormData(formElement);
     setStatus("sending");
     try {
-      await sendContactMessage({
-        name: String(data.get("name") ?? ""),
-        email: String(data.get("email") ?? ""),
-        message: String(data.get("message") ?? ""),
-      });
+      await sendContactMessage(formElement);
       formElement.reset();
       setStatus("success");
     } catch {

@@ -1,4 +1,3 @@
-// All site copy lives here. Replace the [Placeholders] to fill in the site.
 import {
   ClaudeIcon,
   ColabIcon,
@@ -143,7 +142,7 @@ export const about = {
     hasn't gone away.`, 
     `I'm a people person who enjoys researching, building and innovating in teams, 
     and am actively looking for opportunities to learn new technologies and 
-    build things that make a real difference.`,
+    build things that make a difference.`,
   ],
   socials: [
     { label: "GitHub", href: "https://github.com/DoqCA", icon: GithubIcon },
@@ -237,7 +236,7 @@ export const projects = {
       title: "This Website",
       category: "Web",
       description:
-        "My personal portfolio showcasing my projects, experience, and skills. Built with Next.js, React, TypeScript, and Tailwind CSS, featuring a custom WebGL animated background (as you can see), and deployed on Vercel with a focus on performance across devices.",
+        "My personal portfolio showcasing my projects, experience, and skills. Built with Next.js, React, TypeScript, and Tailwind CSS, featuring a raw WebGL animated background (as you can see), and deployed on Vercel with a focus on performance across devices.",
       githubUrl: "https://github.com/DoqCA/personal-website",
       tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
     },
@@ -343,7 +342,7 @@ export const contact = {
     messageLabel: "Your message...",
     submit: "Send message",
     sending: "Sending...",
-    success: "[Success_message: Thanks, I'll get back to you soon.]",
+    success: "Successfully Received: Thanks, I'll get back to you soon.",
     error: "[Error_message: Something went wrong. Please try again.]",
   },
 };
