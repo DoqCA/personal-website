@@ -6,6 +6,16 @@ import { ChevronDownIcon } from "@/components/ui/icons";
 import { Chip } from "@/components/ui/Section";
 import type { ExperienceItem } from "@/data/site";
 
+function BulletList({ bullets, className = "" }: { bullets: string[]; className?: string }) {
+  return (
+    <ul className={`list-disc space-y-2 pl-5 text-body marker:text-muted ${className}`}>
+      {bullets.map((bullet, i) => (
+        <li key={i}>{bullet}</li>
+      ))}
+    </ul>
+  );
+}
+
 export default function ExperienceAccordion({ items }: { items: ExperienceItem[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -57,11 +67,21 @@ export default function ExperienceAccordion({ items }: { items: ExperienceItem[]
 
             <Collapse id={panelId} role="region" aria-labelledby={buttonId} open={open}>
               <div className="px-6 pt-1 pb-5">
-                <ul className="list-disc space-y-2 pl-5 text-body marker:text-muted">
-                  {item.bullets.map((bullet, i) => (
-                    <li key={i}>{bullet}</li>
-                  ))}
-                </ul>
+                {item.roles ? (
+                  <ol className="space-y-5">
+                    {item.roles.map((role, i) => (
+                      <li key={i} className="border-l border-line pl-4">
+                        <h4 className="flex flex-wrap items-baseline justify-between gap-x-4">
+                          <span className="font-medium text-white">{role.title}</span>
+                          <span className="text-sm text-muted">{role.dateRange}</span>
+                        </h4>
+                        <BulletList bullets={role.bullets} className="mt-2" />
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <BulletList bullets={item.bullets} />
+                )}
                 {item.tech.length > 0 && (
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {item.tech.map((tech, i) => (

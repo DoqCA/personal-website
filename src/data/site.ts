@@ -53,15 +53,24 @@ export type NavItem = { id: SectionId; label: string };
 
 export type SocialLink = { label: string; href?: string; icon: Icon };
 
+export type ExperienceRole = {
+  title: string;
+  dateRange: string;
+  bullets: string[];
+};
+
 export type ExperienceItem = {
   id: string;
   title: string;
   company: string;
   location: string;
   dateRange: string;
-  bullets: string[];
   tech: string[];
-};
+} & (
+  | { bullets: string[]; roles?: never }
+  /** Multiple roles at the same company, listed most recent first. */
+  | { roles: ExperienceRole[]; bullets?: never }
+);
 
 export const projectCategories = [
   "All",
@@ -193,13 +202,30 @@ export const experience = {
     },
     {
       id: "blackboyscode",
-      title: "Team Lead & Curriculum Development",
+      title: "Team Lead & Instructor",
       company: "BlackBoysCode",
       location: "Remote",
-      dateRange: "02/2026 – Present",
-      bullets: [
-        "Direct teams across Canada delivering technical literacy programs in Math, CS, and AI to students in grades 4–9.",
-        "Appointed to the national Curriculum Development Team, contributing to Python, Math, and ML instructional modules delivered to over 18,000 youth across North America.",
+      dateRange: "02/2024 – 12/2024, 02/2026 – Present",
+      roles: [
+        {
+          title: "Team Lead & Curriculum Development",
+          dateRange: "06/2026 – Present",
+          bullets: [
+            "Direct teams across Canada delivering technical literacy programs in Math, CS, and AI to students in grades 4–9.",
+            "Train and lead 6 instructors teaching Math, CS, and AI across grades 4–6 & 7–9.",
+            "Supervise live classes and provide additional support to students during and after sessions when class size limits instructor availability.",
+            "Appointed to Curriculum Refinement Team, contributing to Python, Math, and ML instructional modules delivered to over 18,000 youth across North America.",
+          ],
+        },
+        {
+          title: "Instructor",
+          dateRange: "02/2024 – 12/2024, 02/2026 – 05/2026",
+          bullets: [
+            "Taught 250+ students in live classes of 40+ and one-on-one sessions across DSA, CS math, and introductory supervised, unsupervised, and reinforcement learning.",
+            "Introduced RL to grades 7-9 using OpenAI Gym (CartPole, FrozenLake-v1): scaffolded manual Q-table exercises, visualizations of trained vs. random agents and action values, and exploration vs. exploitation, with the update rule abstracted away for understanding.",
+            "Mentored students in building supervised learning models, including a weather-prediction model trained on Seattle weather data.",
+          ],
+        },
       ],
       tech: ["Python", "Machine Learning", "Curriculum Design", "Leadership"],
     },
