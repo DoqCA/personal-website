@@ -14,6 +14,7 @@ import { FiGithub, FiLinkedin } from "react-icons/fi";
 import {
   SiClaude,
   SiCplusplus,
+  SiEspressif,
   SiFfmpeg,
   SiFirebase,
   SiGit,
@@ -23,6 +24,7 @@ import {
   SiGradio,
   SiHtml5,
   SiJavascript,
+  SiLinux,
   SiNextdotjs,
   SiNodedotjs,
   SiNumpy,
@@ -37,13 +39,14 @@ import {
   SiScipy,
   SiSqlite,
   SiStreamlit,
+  SiSupabase,
   SiTailwindcss,
   SiTensorflow,
   SiTypescript,
   SiVercel,
   SiVmware,
 } from "react-icons/si";
-import { TbChartLine } from "react-icons/tb";
+import { TbChartLine, TbSql } from "react-icons/tb";
 
 export type Icon = ComponentType<{
   className?: string;
@@ -87,9 +90,13 @@ export const OpencvIcon: Icon = SiOpencv;
 export const NodejsIcon: Icon = SiNodedotjs;
 export const FirebaseIcon: Icon = SiFirebase;
 export const SqliteIcon: Icon = SiSqlite;
+export const SupabaseIcon: Icon = SiSupabase;
+export const SqlIcon: Icon = TbSql;
 export const GitIcon: Icon = SiGit;
 export const GithubBrandIcon: Icon = SiGithub;
 export const ShellIcon: Icon = SiGnubash;
+export const LinuxIcon: Icon = SiLinux;
+export const Esp32Icon: Icon = SiEspressif;
 export const VercelIcon: Icon = SiVercel;
 export const ColabIcon: Icon = SiGooglecolab;
 export const FfmpegIcon: Icon = SiFfmpeg;

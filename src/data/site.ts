@@ -3,6 +3,7 @@ import {
   ColabIcon,
   CppIcon,
   DocumentIcon,
+  Esp32Icon,
   FfmpegIcon,
   FirebaseIcon,
   GitIcon,
@@ -13,6 +14,7 @@ import {
   JavaIcon,
   JavascriptIcon,
   LinkedinIcon,
+  LinuxIcon,
   MatplotlibIcon,
   NextjsIcon,
   NodejsIcon,
@@ -27,8 +29,10 @@ import {
   ScikitlearnIcon,
   ScipyIcon,
   ShellIcon,
+  SqlIcon,
   SqliteIcon,
   StreamlitIcon,
+  SupabaseIcon,
   TailwindIcon,
   TensorflowIcon,
   TypescriptIcon,
@@ -223,12 +227,22 @@ export const projects = {
   currentLabel: "Currently building",
   items: [
     {
-      id: "nte-theorycrafting-engine",
-      title: "Neverness to Everness Theorycrafting Engine",
+      id: "uais-wifi-sleep-monitoring",
+      title: "Wi-Fi Sleep Monitoring System",
+      category: "AI/ML",
+      badge: "UAIS",
+      current: true,
+      description:
+        "A contactless sleep-monitoring system built with an 8–9 person team at the Undergraduate AI Society (selected from 50+ applicants), using Wi-Fi CSI captured on ESP32 boards, SciPy signal processing, and ML to detect breathing, movement, and sleep patterns.",
+      tags: ["Python", "SciPy", "Signal Processing", "Machine Learning", "ESP32"],
+    },
+    {
+      id: "game-mechanics-simulation-engine",
+      title: "Game Mechanics Simulation Engine",
       category: "Games",
       current: true,
       description:
-        "A data-driven combat simulator in Rust that models characters, skills, buffs, and encounters as structured data, built for high-throughput Monte Carlo runs and validated against hand-calculated rotations.",
+        "A theorycrafting (simulation and search) engine in Rust for the live-service action combat game Neverness to Everness, modelling characters, skills, buffs, and encounters as structured data for high-throughput Monte Carlo runs and MCTS-based team composition search.",
       tags: ["Rust", "Monte Carlo", "Simulation", "Search", "Games"],
     },
     {
@@ -307,7 +321,9 @@ export const stack = {
       items: [
         { name: "Node.js", icon: NodejsIcon },
         { name: "Firestore", icon: FirebaseIcon },
+        { name: "SQL", icon: SqlIcon },
         { name: "SQLite", icon: SqliteIcon },
+        { name: "Supabase", icon: SupabaseIcon },
       ],
     },
     {
@@ -316,6 +332,8 @@ export const stack = {
         { name: "Git", icon: GitIcon },
         { name: "GitHub", icon: GithubBrandIcon },
         { name: "Shell", icon: ShellIcon },
+        { name: "Linux", icon: LinuxIcon },
+        { name: "ESP32", icon: Esp32Icon },
         { name: "Vercel", icon: VercelIcon },
         { name: "Colab", icon: ColabIcon },
         {name: "Firebase", icon: FirebaseIcon},
