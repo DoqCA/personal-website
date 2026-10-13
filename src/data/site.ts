@@ -214,7 +214,7 @@ export const experience = {
             "Direct teams across Canada delivering technical literacy programs in Math, CS, and AI to students in grades 4–9.",
             "Train and lead 6 instructors teaching Math, CS, and AI across grades 4–6 & 7–9.",
             "Supervise live classes and provide additional support to students during and after sessions when class size limits instructor availability.",
-            "Appointed to Curriculum Refinement Team, contributing to Python, Math, and ML instructional modules delivered to over 18,000 youth across North America.",
+            "Appointed to Curriculum Refinement Team, contributing to Python, Math, and ML instructional modules that reach over 18,000 youth across North America.",
           ],
         },
         {
