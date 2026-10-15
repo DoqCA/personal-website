@@ -28,7 +28,7 @@ src/
   components/sections/    page sections (Hero, About, Projects, ...)
   components/ui/          shared primitives (Section, Reveal, Collapse)
   data/site.ts            all site copy and links
-  lib/contact.ts          contact form handler (stubbed as of now)
+  lib/contact.ts          contact form handler
 ```
 
 To change content, edit `src/data/site.ts`. You shouldn't need to touch the components.
