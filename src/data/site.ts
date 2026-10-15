@@ -120,7 +120,7 @@ export const site = {
   role3: "People Person",
   metadata: {
     title: "O'Mario Dev",
-    description: "[Site_description]",
+    description: "CS student building automation, ML, and web projects.",
   },
 };
 
