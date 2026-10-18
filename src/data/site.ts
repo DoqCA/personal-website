@@ -190,13 +190,14 @@ export const experience = {
   heading: "Experience",
   items: [
     {
-      id: "riipen-level-up",
-      title: "Software Engineering Placement (Incoming)",
-      company: "Undetermined",
+      id: "souvenote-riipen-level-up",
+      title: "Full-Stack Developer Placement (Incoming)",
+      company: "Souvenote",
       location: "Remote",
       dateRange: "10/2026 – 12/2026",
       bullets: [
-        "Accepted into Riipen Level Up's employer-matched placement program; currently being matched with a software project.",
+        "Expected: audit, improve, and migrate the front end of an AI-powered greeting-card web app in a 3-person team, preserving existing behavior while organizing reusable components and shared state.",
+        "Expected: integrate AI image and music generation APIs with the back end; test uploads, audio playback, and accessibility on iPhone Safari and Android Chrome; document architecture for handoff."
       ],
       tech: [],
     },
