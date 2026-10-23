@@ -196,8 +196,7 @@ export const experience = {
       location: "Remote",
       dateRange: "10/2026 – 12/2026",
       bullets: [
-        "Expected: audit, improve, and migrate the front end of an AI-powered greeting-card web app in a 3-person team, preserving existing behavior while organizing reusable components and shared state.",
-        "Expected: integrate AI image and music generation APIs with the back end; test uploads, audio playback, and accessibility on iPhone Safari and Android Chrome; document architecture for handoff."
+        "Build a mobile-friendly full-stack prototype (front end, back end, auth, database) with AI API integration; define architecture, database structure, and API dependencies; run functional/integration tests on AI/API workflows.",
       ],
       tech: [],
     },
