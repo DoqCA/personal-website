@@ -191,7 +191,7 @@ export const experience = {
   items: [
     {
       id: "souvenote-riipen-level-up",
-      title: "Full-Stack Developer Placement (Incoming)",
+      title: "Full-Stack Developer (Incoming)",
       company: "Souvenote",
       location: "Remote",
       dateRange: "10/2026 – 12/2026",
