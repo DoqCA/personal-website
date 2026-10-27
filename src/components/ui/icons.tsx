@@ -9,7 +9,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { FaJava } from "react-icons/fa6";
+import { FaAws, FaJava } from "react-icons/fa6";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import {
   SiClaude,
@@ -21,16 +21,17 @@ import {
   SiGithub,
   SiGnubash,
   SiGooglecolab,
-  SiGradio,
   SiHtml5,
   SiJavascript,
   SiLinux,
+  SiNestjs,
   SiNextdotjs,
   SiNodedotjs,
   SiNumpy,
   SiOllama,
   SiOpencv,
   SiPandas,
+  SiPostgresql,
   SiPython,
   SiPytorch,
   SiReact,
@@ -38,7 +39,7 @@ import {
   SiScikitlearn,
   SiScipy,
   SiSqlite,
-  SiStreamlit,
+  SiStripe,
   SiSupabase,
   SiTailwindcss,
   SiTensorflow,
@@ -103,5 +104,7 @@ export const FfmpegIcon: Icon = SiFfmpeg;
 export const VmwareIcon: Icon = SiVmware;
 export const ClaudeIcon: Icon = SiClaude;
 export const OllamaIcon: Icon = SiOllama;
-export const StreamlitIcon: Icon = SiStreamlit;
-export const GradioIcon: Icon = SiGradio;
+export const PostgresqlIcon: Icon = SiPostgresql;
+export const AwsIcon: Icon = FaAws;
+export const StripeIcon: Icon = SiStripe;
+export const NestjsIcon: Icon = SiNestjs;
